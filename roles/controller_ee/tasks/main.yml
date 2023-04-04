@@ -7,14 +7,18 @@
     validate_certs: no
 
     name: "{{ ee_name }}"
+    description: "{{ ee_description | default(omit) }}"
+    organization: "{{ ee_organization | default(omit) }}"
     state: present
-    galaxy_credentials: "{{ galaxy_credentials }}"
+    image: "{{ ee_image }}"
+    credentials: "{{ ee_credentials | default(omit) }}"
+    pull: "{{ ee_pull | default('missing', true) }}"
 
   delegate_to: localhost
   when:
     - not remove | default ('false') | bool
 
-- name: remove organization
+- name: remove ee
   ansible.controller.execution_environment:
     controller_host: "{{ controller_host }}"
     controller_username: "{{ controller_username }}"
