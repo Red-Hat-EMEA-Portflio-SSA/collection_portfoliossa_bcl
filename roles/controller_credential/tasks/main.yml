@@ -24,7 +24,7 @@
     controller_password: "{{ controller_password }}"
     validate_certs: no
 
-    name: "{{ automatinhub_credential_name }}"
+    name: "{{ credential_name }}"
     state: absent
     credential_type: "{{ credential_type }}"
   register: credential_create
@@ -36,6 +36,6 @@
 - name: Debug credential create / credential remove
   debug:
      msg:  |
-      {{ credential_create_automationhub }}
+      {{ credential_create }}
   when:
     - debug | default ('false') | bool
