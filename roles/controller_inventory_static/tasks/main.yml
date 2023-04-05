@@ -18,7 +18,38 @@
 
 - name: debug inventory_hosts
   ansible.builtin.debug:
-    var: inventory_hosts
+    var: inventory_create
+
+- name: DEBUG 1
+  ansible.builtin.debug:
+    msg: 
+      - "loop: {{ inventory_hosts }}"
+
+- name: DEBUG 1.5
+  ansible.builtin.debug:
+    msg: 
+     - "inner_item: {{ inner_item }}"
+     - "item: {{ item }}"
+  loop: "{{ inventory_hosts }}"
+  loop_control:
+    loop_var: inner_item
+
+- name: DEBUG 2
+  ansible.builtin.debug:
+    msg: 
+      - "inventory: {{ inventory_name }}"
+    
+      - "name: {{ inner_item.name }}"
+      - "description: {{ inner_item.description | default(omit) }}"
+      - "ansible_host: {{ inner_item.host_ip | default (omit)  }}"
+      - "ansible_connection: {{ inner_item.ansible_connection | default (omit) }}"
+      - "ansible_python_interpreter: {{ inner_item.ansible_python_interpreter | default (omit) }}"
+  delegate_to: localhost
+  when:
+    - not remove | default ('false') | bool
+  loop: "{{ inventory_hosts }}"
+  loop_control:
+    loop_var: inner_item
 
 - name: add hosts to static inventory 
   ansible.controller.host:
@@ -29,20 +60,22 @@
 
     inventory: "{{ inventory_name }}"
     
-    name: "{{ item.name }}"
-    description: "{{ item.description | default(omit) }}"
+    name: "{{ inner_item.name }}"
+    description: "{{ inner_item.description | default(omit) }}"
     enabled: true
     state: present
     variables:
-        ansible_host: "{{ item.host_ip | default (omit)  }}"
-        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
-        ansible_python_interpreter: "{{ item.ansible_python_interpreter | default (omit) }}"
+        ansible_host: "{{ inner_item.host_ip | default (omit)  }}"
+        ansible_connection: "{{ inner_item.ansible_connection | default (omit) }}"
+        ansible_python_interpreter: "{{ inner_item.ansible_python_interpreter | default (omit) }}"
 
-  register: inventory_create
+  register: inventory_hosts_create
   delegate_to: localhost
   when:
     - not remove | default ('false') | bool
   loop: "{{ inventory_hosts }}"
+  loop_control:
+    loop_var: inner_item
 
 - name: remove static inventory
   ansible.controller.inventory:
@@ -65,3 +98,11 @@
       {{ inventory_create }}
   when:
     - debug | default ('false') | bool
+
+- name: Debug inventory hosts create / inventory remove
+  debug:
+     msg:  |
+      {{ inventory_hosts_create }}
+  when:
+    - debug | default ('false') | bool
+    - not remove | default ('false') | bool
