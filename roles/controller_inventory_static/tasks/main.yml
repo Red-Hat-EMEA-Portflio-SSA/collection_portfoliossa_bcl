@@ -16,6 +16,10 @@
   when:
     - not remove | default ('false') | bool
 
+- name: debug inventory_hosts
+  ansible.builtin.debug:
+    var: inventory_hosts
+
 - name: add hosts to static inventory 
   ansible.controller.host:
     controller_host: "{{ controller_host }}"
