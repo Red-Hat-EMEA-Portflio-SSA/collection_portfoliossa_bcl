@@ -16,41 +16,6 @@
   when:
     - not remove | default ('false') | bool
 
-- name: debug inventory_hosts
-  ansible.builtin.debug:
-    var: inventory_create
-
-- name: DEBUG 1
-  ansible.builtin.debug:
-    msg: 
-      - "loop: {{ inventory_hosts }}"
-
-- name: DEBUG 1.5
-  ansible.builtin.debug:
-    msg: 
-     - "inner_item: {{ inner_item }}"
-     - "item: {{ item }}"
-  loop: "{{ inventory_hosts }}"
-  loop_control:
-    loop_var: inner_item
-
-- name: DEBUG 2
-  ansible.builtin.debug:
-    msg: 
-      - "inventory: {{ inventory_name }}"
-    
-      - "name: {{ inner_item.name }}"
-      - "description: {{ inner_item.description | default(omit) }}"
-      - "ansible_host: {{ inner_item.host_ip | default (omit)  }}"
-      - "ansible_connection: {{ inner_item.ansible_connection | default (omit) }}"
-      - "ansible_python_interpreter: {{ inner_item.ansible_python_interpreter | default (omit) }}"
-  delegate_to: localhost
-  when:
-    - not remove | default ('false') | bool
-  loop: "{{ inventory_hosts }}"
-  loop_control:
-    loop_var: inner_item
-
 - name: add hosts to static inventory 
   ansible.controller.host:
     controller_host: "{{ controller_host }}"
