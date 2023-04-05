@@ -1,2 +1,63 @@
 ---
-# tasks file for controller_inventory_static
+- name: create static inventory 
+  ansible.controller.inventory:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_password }}"
+    validate_certs: no
+
+    name: "{{ inventory_name }}"
+    description: "{{ inventory_description }}"
+    organization: "{{ inventory_organization }}"
+    state: present
+
+  register: inventory_create
+  delegate_to: localhost
+  when:
+    - not remove | default ('false') | bool
+
+- name: add hosts to static inventory 
+  ansible.controller.host:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_password }}"
+    validate_certs: no
+
+    inventory: "{{ inventory_name }}"
+    
+    name: "{{ item.name }}"
+    description: "{{ item.description | default(omit) }}"
+    enabled: true
+    state: present
+    variables:
+        ansible_host: "{{ item.host_ip | default (omit)  }}"
+        ansible_connection: "{{ item.ansible_connection | default (omit) }}"
+        ansible_python_interpreter: "{{ item.ansible_python_interpreter | default (omit) }}"
+
+  register: inventory_create
+  delegate_to: localhost
+  when:
+    - not remove | default ('false') | bool
+  loop: "{{ inventory_hosts }}"
+
+- name: remove static inventory
+  ansible.controller.inventory:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_password }}"
+    validate_certs: no
+
+    name: "{{ inventory_name }}"
+    state: absent
+  register: inventory_create
+  delegate_to: localhost
+  when:
+    - remove | default ('false') | bool
+
+
+- name: Debug inventory create / inventory remove
+  debug:
+     msg:  |
+      {{ inventory_create }}
+  when:
+    - debug | default ('false') | bool
