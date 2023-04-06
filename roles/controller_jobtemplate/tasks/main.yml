@@ -23,6 +23,26 @@
   when:
     - not remove | default ('false') | bool
 
+- name: Create all the job templates nodes as parts of the workflow
+  ansible.controller.workflow_job_template_node:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_password }}"
+    validate_certs: no
+
+    workflow_job_template: "{{ jobtemplate_workflow }}"
+
+    identifier: "{{ jobtemplate_identifier }}"
+    unified_job_template: "{{ jobtemplate_name }}"
+    organization:  "{{ jobtemplate_organization  | default(omit) }}"
+    success_nodes: "{{ jobtemplate_success_nodes | default(omit) }}"
+    always_nodes:  "{{ jobtemplate_always_nodes  | default(omit) }}"
+    failure_nodes: "{{ jobtemplate_failure_nodes | default(omit) }}"
+  delegate_to: localhost
+  when: 
+    - jobtemplate_workflow_member == true
+    - not remove | default ('false') | bool
+
 - name: remove job template
   ansible.controller.job_template:
     controller_host: "{{ controller_host }}"
@@ -36,7 +56,6 @@
   delegate_to: localhost
   when:
     - remove | default ('false') | bool
-
 
 - name: Debug jobtemplate create / jobtemplate remove
   debug:
