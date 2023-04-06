@@ -1,2 +1,40 @@
 ---
-# tasks file for controller_workflowtemplate
+- name: create workflow job template
+  ansible.controller.workflow_job_template:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_password }}"
+    validate_certs: no
+
+    name: "{{ workflowtemplate_name }}"
+    description: "{{ workflowtemplate_description | default(omit) }}"
+    organization: "{{ workflowtemplate_organization | default(omit) }}"
+    state: present
+    inventory: "{{ workflowtemplate_inventory }}"
+    extra_vars: "{{ workflowtemplate_extravars | default(omit) }}"
+  register: workflowtemplate_create
+  delegate_to: localhost
+  when:
+    - not remove | default ('false') | bool
+
+- name: remove workflow template
+  ansible.controller.workflow_job_template:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_password }}"
+    validate_certs: no
+
+    name: "{{ workflowtemplate_name }}"
+    state: absent
+  register: workflowtemplate_create
+  delegate_to: localhost
+  when:
+    - remove | default ('false') | bool
+
+
+- name: Debug workflowtemplate create / workflowtemplate remove
+  debug:
+     msg:  |
+      {{ workflowtemplate_create }}
+  when:
+    - debug | default ('false') | bool
