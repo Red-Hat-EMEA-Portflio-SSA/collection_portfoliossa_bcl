@@ -21,7 +21,13 @@ options {
 	allow-query     { any ; };
 
 	recursion yes;
-
+{% if bastion_named_forwarders is defined %}
+	forwarders { 
+{% for forwarder in bastion_named_forwarders %}
+               {{ forwarder }} ;
+{% endfor %}
+	};
+{% endif %}
 	dnssec-enable yes;
 	dnssec-validation yes;
 

@@ -12,3 +12,10 @@
     name: chronyd
     state: started
     enabled: true
+
+- name: permit traffic in default zone for ntp service
+  ansible.posix.firewalld:
+    service: ntp
+    permanent: true
+    immediate: true
+    state: enabled

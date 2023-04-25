@@ -31,6 +31,13 @@
   vars:
     sessionkey: "{{ sessionkey_entry }}"
 
+- name: permit traffic in default zone for dhcp service
+  ansible.posix.firewalld:
+    service: dhcp
+    permanent: true
+    immediate: true
+    state: enabled
+
 - name: start dhcpd
   ansible.builtin.systemd:
     name: dhcpd

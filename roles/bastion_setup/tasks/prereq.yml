@@ -11,6 +11,11 @@
     auto_attach: true
     pool_ids:
       - "{{ rhsm_poolid | default (omit) }}"
+  ignore_errors: true
+  register: rhsm_result
+  failed_when: >
+    ( rhsm_result.failed ) and 
+    ( 'This system is already registered.' not in rhsm_result.stdout ) 
 
 - name: make sure RHSM repo management is enabled
   ansible.builtin.lineinfile:

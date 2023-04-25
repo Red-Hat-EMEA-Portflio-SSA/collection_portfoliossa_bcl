@@ -8,6 +8,16 @@
 
 # - name: configure httpd
 
+- name: permit traffic in default zone for http service
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop:
+    - http
+    - https
+
 - name: start httpd
   ansible.builtin.systemd:
     name: httpd

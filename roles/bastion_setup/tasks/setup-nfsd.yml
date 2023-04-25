@@ -13,6 +13,18 @@
 
 # - name: configure nfs
 
+- name: permit traffic in default zone for nfs services
+  ansible.posix.firewalld:
+    service: "{{ item }}"
+    permanent: true
+    immediate: true
+    state: enabled
+  loop:
+    - nfs 
+    - nfs3
+    - rpc-bind
+
+
 - name: start nfs
   ansible.builtin.systemd:
     name: "{{ item }}"

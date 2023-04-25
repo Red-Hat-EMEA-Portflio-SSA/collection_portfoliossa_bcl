@@ -68,6 +68,13 @@
     dest: /var/named/{{ item }}.zone
   loop: "{{ bastion_named_revzones }}"
 
+- name: permit traffic in default zone for named service
+  ansible.posix.firewalld:
+    service: dns
+    permanent: true
+    immediate: true
+    state: enabled
+
 - name: start named
   ansible.builtin.systemd:
     name: named
