@@ -33,12 +33,87 @@
         ansible_host: "{{ inner_item.host_ip | default (omit)  }}"
         ansible_connection: "{{ inner_item.ansible_connection | default (omit) }}"
         ansible_python_interpreter: "{{ inner_item.ansible_python_interpreter | default (omit) }}"
+        ilo_ip: "{{ inner_item.ilo_ip | default (omit) }}"
+        host_bootproto: "{{ inner_item.host_bootproto | default (omit) }}"
+        host_ip: "{{ inner_item.host_ip | default (omit) }}"
+        host_nic: "{{ inner_item.host_nic | default (omit) }}"
+        host_vlan: "{{ inner_item.host_vlan | default (omit) }}"
+        host_mask: "{{ inner_item.host_mask | default (omit) }}"
+        host_gw: "{{ inner_item.host_gw | default (omit) }}"
+        host_nameserver: "{{ inner_item.host_nameserver | default (omit) }}"
 
   register: inventory_hosts_create
   delegate_to: localhost
   when:
     - not remove | default ('false') | bool
   loop: "{{ inventory_hosts }}"
+  loop_control:
+    loop_var: inner_item
+
+#### new way of with_nested 0 is of inventory_hosts - 1 is form inventory_groups
+- name: debug - all items
+  ansible.builtin.debug:
+    msg: 
+     - "inner_item.1 is {{ inner_item.1 }}"
+     - "inner_item.0 is {{ inner_item.0 }}"
+  delegate_to: localhost
+  when:
+    - debug | default ('false') | bool
+    - not remove | default ('false') | bool
+  loop: "{{ inventory_hosts | product( inventory_groups) }}"
+  loop_control:
+    loop_var: inner_item
+
+- name: debug - add hosts to groups
+  ansible.builtin.debug:
+    msg: 
+     - "inner_item.1 is {{ inner_item.1 }}"
+     - "inner_item.0.name is {{ inner_item.0.name }}"
+  delegate_to: localhost
+  when:
+    - debug | default ('false') | bool
+    - inner_item.1 in inner_item.0.groups
+    - not remove | default ('false') | bool
+  loop: "{{ inventory_hosts | product( inventory_groups) }}"
+  loop_control:
+    loop_var: inner_item
+
+- name: create host-groups
+  ansible.controller.group:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_password }}"
+    validate_certs: no
+
+    inventory: "{{ inventory_name }}"
+    name: "{{ inner_item }}"
+    state: present
+  delegate_to: localhost
+  when:
+    - not remove | default ('false') | bool
+  loop: "{{ inventory_groups }}"
+  loop_control:
+    loop_var: inner_item
+
+- name: add hosts to groups
+  ansible.controller.group:
+    controller_host: "{{ controller_host }}"
+    controller_username: "{{ controller_username }}"
+    controller_password: "{{ controller_password }}"
+    validate_certs: no
+
+    inventory: "{{ inventory_name }}"
+    name: "{{ inner_item.1 }}"
+    hosts:
+      - "{{ inner_item.0.name }}"
+    preserve_existing_hosts: True
+    #preserve_existing_children: True
+    state: present
+  delegate_to: localhost
+  when:
+    - inner_item.1 in inner_item.0.groups
+    - not remove | default ('false') | bool
+  loop: "{{ inventory_hosts | product( inventory_groups) }}"
   loop_control:
     loop_var: inner_item
 
@@ -50,11 +125,13 @@
     validate_certs: no
 
     name: "{{ inventory_name }}"
+    organization: "{{ inventory_organization }}"
     state: absent
   register: inventory_create
   delegate_to: localhost
   when:
     - remove | default ('false') | bool
+  ignore_errors: true
 
 
 - name: Debug inventory create / inventory remove
