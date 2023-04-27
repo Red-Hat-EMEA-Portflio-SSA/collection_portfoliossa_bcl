@@ -74,13 +74,3 @@
   shell: "genisoimage -relaxed-filenames -J -R -o {{ bastion_iso_dir }}/{{ inventory_hostname + '.iso' }} -b isolinux.bin -c boot.cat -no-emul-boot -boot-load-size 4 -boot-info-table -eltorito-alt-boot -e efiboot.img -no-emul-boot {{ wrk_dir }}"
   become: true
   delegate_to:  bastion
-
-# not needed as we create the iso right into the bastion_iso_dir
-#   - name: put customized iso image in place
-#     copy:
-#       src: "{{ cust_iso }}"
-#       dest: "{{ bastion_iso_dir }}"
-#       remote_src: yes
-#       owner: root
-#       group: root
-#       mode: '0644'
