@@ -22,7 +22,7 @@
     validate_certs: no
 
     name: "{{ organization_name }}"
-    state: present
+    state: absent
   delegate_to: localhost
   when:
     - remove | default ('false') | bool
