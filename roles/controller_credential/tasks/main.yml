@@ -17,7 +17,7 @@
   when:
     - not remove | default ('false') | bool
 
-- name: remove credentials to automation hub
+- name: remove credentials from automation hub
   ansible.controller.credential:
     controller_host: "{{ controller_host }}"
     controller_username: "{{ controller_username }}"
@@ -26,11 +26,12 @@
 
     name: "{{ credential_name }}"
     state: absent
-    credential_type: "{{ credential_type }}"
+    # credential_type: "{{ credential_type }}"
   register: credential_create
   delegate_to: localhost
   when:
     - remove | default ('false') | bool
+  ignore_errors: true
 
 
 - name: Debug credential create / credential remove
