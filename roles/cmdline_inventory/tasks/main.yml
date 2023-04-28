@@ -3,17 +3,20 @@
 
 - name: Add OneView Host to inventory
   add_host:
-    name: "{{ item.name }}"
-    ansible_host: "{{ item.host_ip | default (omit)  }}"
-    ansible_connection: "{{ item.ansible_connection | default (omit) }}"
-    ansible_python_interpreter: "{{ item.ansible_python_interpreter | default (omit) }}"
-    ilo_ip: "{{ item.ilo_ip | default (omit) }}"
-    host_bootproto: "{{ item.host_bootproto | default (omit) }}"
-    host_ip: "{{ item.host_ip | default (omit) }}"
-    host_nic: "{{ item.host_nic | default (omit) }}"
-    host_vlan: "{{ item.host_vlan | default (omit) }}"
-    host_mask: "{{ item.host_mask | default (omit) }}"
-    host_gw: "{{ item.host_gw | default (omit) }}"
-    host_nameserver: "{{ item.host_nameserver | default (omit) }}"
-    groups: "{{ item.groups | default (omit) }}" 
+    name: "{{ inner_item.name }}"
+    ansible_host: "{{ inner_item.host_ip | default (omit)  }}"
+    ansible_connection: "{{ inner_item.ansible_connection | default (omit) }}"
+    ansible_python_interpreter: "{{ inner_item.ansible_python_interpreter | default (omit) }}"
+    ilo_ip: "{{ inner_item.ilo_ip | default (omit) }}"
+    host_bootproto: "{{ inner_item.host_bootproto | default (omit) }}"
+    host_ip: "{{ inner_item.host_ip | default (omit) }}"
+    host_nic: "{{ inner_item.host_nic | default (omit) }}"
+    host_vlan: "{{ inner_item.host_vlan | default (omit) }}"
+    host_mask: "{{ inner_item.host_mask | default (omit) }}"
+    host_gw: "{{ inner_item.host_gw | default (omit) }}"
+    host_nameserver: "{{ inner_item.host_nameserver | default (omit) }}"
+    groups: "{{ inner_item.groups | default (omit) }}" 
   loop: "{{ inventory_hosts }}"
+  loop_control:
+    loop_var: inner_item
+
