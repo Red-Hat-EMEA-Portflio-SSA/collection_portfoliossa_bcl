@@ -1,7 +1,7 @@
 ---
 - name: Wait for ESXi to be ready
   ansible.builtin.wait_for:
-    port: 902
+    port: "{{ inner_item }}"
     host: "{{ esxi_hostname }}"
     # all values in seconds
     delay: 300            # wait 5 min before 1st try
@@ -10,10 +10,18 @@
     timeout: 1200         # wait 20 min alltogether before failing
     msg: "ESXi {{ esxi_hostname }} not ready yet"
   delegate_to: localhost
+  loop:
+    - '902'
+    - '80'
+    - '443'
+    - '427'
+  loop_control:
+    loop_var: inner_item
+  # see: https://kb.vmware.com/s/article/2039095 for needed ports
 
 - name: Wait for ESXi to be ready - twice due to reboot of ESXI
   ansible.builtin.wait_for:
-    port: 902
+    port: "{{ inner_item }}"
     host: "{{ esxi_hostname }}"
     # all values in seconds
     delay: 30             # wait 30 sec before 1st try
@@ -22,6 +30,13 @@
     timeout: 600          # wait 10 min alltogether before failing
     msg: "ESXi {{ esxi_hostname }} not ready after second boot yet"
   delegate_to: localhost
+  loop:
+    - '902'
+    - '80'
+    - '443'
+    - '427'
+  loop_control:
+    loop_var: inner_item
 
 - name: Connect the host(s)
   community.vmware.vmware_host:
