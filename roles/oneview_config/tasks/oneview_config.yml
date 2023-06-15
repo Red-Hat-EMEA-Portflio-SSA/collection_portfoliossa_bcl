@@ -70,7 +70,10 @@
   delegate_to: localhost
   register: result
 
-- debug: msg= "{{ result.msg }}"
+# did lately not work... somehow "
+# navigator stopped with:
+#   fatal: [rh-bctl-1-gen9]: FAILED! => {"msg": "invalid or malformed argument: '\"Server Profile created.\"'"}
+# - debug: msg= "{{ result.msg }}"
 
 ##- name: Gather facts about the Server Profile Template by name
 ##  hpe.oneview.oneview_server_profile_template_facts:

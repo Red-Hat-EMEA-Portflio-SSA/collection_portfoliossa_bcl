@@ -3,7 +3,8 @@
   ansible.builtin.yum:
     name: 
       - python3-pip
-      - python3-virtualenv
+      # not available with RHEL 9 - most likely not needed either
+      # - python3-virtualenv
       - python3-setuptools
       - gcc
     state: present
