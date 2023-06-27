@@ -11,7 +11,7 @@
     organization: "{{ ee_organization | default(omit) }}"
     state: present
     image: "{{ ee_image }}"
-    credentials: "{{ ee_credentials | default(omit) }}"
+    credential: "{{ ee_credential | default(omit) }}"
     pull: "{{ ee_pull | default('missing', true) }}"
 
   delegate_to: localhost
