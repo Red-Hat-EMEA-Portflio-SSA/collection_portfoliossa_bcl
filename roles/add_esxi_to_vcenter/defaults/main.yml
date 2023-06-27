@@ -1,2 +1,3 @@
 ---
 # defaults file for add_esxi_to_vcenter
+vcenter_datacentername: default-dc
