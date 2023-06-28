@@ -59,13 +59,13 @@
 - name: provide initial zone files
   ansible.builtin.template:
     src: zone.j2
-    dest: /var/named/{{ item }}.zone
+    dest: /var/named/dynamic/{{ item }}.zone
   loop: "{{ bastion_named_zones }}"
 
 - name: provide initial zone files
   ansible.builtin.template:
     src: reverse_zone.j2  
-    dest: /var/named/{{ item }}.zone
+    dest: /var/named/dynamic/{{ item }}.zone
   loop: "{{ bastion_named_revzones }}"
 
 - name: permit traffic in default zone for named service
