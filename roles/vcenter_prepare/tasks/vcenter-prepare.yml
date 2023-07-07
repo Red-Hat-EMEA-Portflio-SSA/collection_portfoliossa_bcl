@@ -64,3 +64,54 @@
     var: vcenter_folder_info
   when:
     - debug | default ('false') | bool
+
+- name: Asure to have Cluster
+  community.vmware.vmware_cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: "{{ vcenter_validate_certs }}"
+    datacenter: "{{ vcenter_datacentername }}"
+    cluster_name: "{{ vcenter_clustername }}"
+  delegate_to: localhost
+  register: vcenter_cluster_info
+
+- name: print community info about cluster
+  debug:
+    var: vcenter_cluster_info
+  when:
+    - debug | default ('false') | bool
+
+- name: Asure to have a distributed vSwitch
+  community.vmware.vmware_dvswitch:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: "{{ vcenter_validate_certs }}"
+    datacenter: "{{ vcenter_datacentername }}"
+    switch_name: "{{ vcenter_vswitchname }}"
+    uplink_quantity: 1
+    state: present
+  delegate_to: localhost
+  register: vcenter_vswitch_info
+
+- name: print community info about vswitch
+  debug:
+    var: vcenter_cluster_info
+  when:
+    - debug | default ('false') | bool
+
+- name: Asure to have a port group
+  community.vmware.vmware_dvs_portgroup:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: "{{ vcenter_validate_certs }}"
+    switch_name: "{{ vcenter_vswitchname }}"
+    portgroup_name: "{{ vcenter_portgroupname }}"
+    vlan_id: "{{ vcenter_vlanid }}"
+    num_ports: 120
+    port_binding: static
+    state: present
+  delegate_to: localhost
+  register: vcenter_vswitch_info

@@ -1,4 +1,40 @@
 ---
+- name: Remove port group
+  community.vmware.vmware_dvs_portgroup:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: "{{ vcenter_validate_certs }}"
+    switch_name: "{{ vcenter_vswitchname }}"
+    portgroup_name: "{{ vcenter_portgroupname }}"
+    vlan_id: "{{ vcenter_vlanid }}"
+    state: absent
+  delegate_to: localhost
+  register: vcenter_vswitch_info
+
+- name: Remove distributed vSwitch
+  community.vmware.vmware_dvswitch:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: "{{ vcenter_validate_certs }}"
+    datacenter: "{{ vcenter_datacentername }}"
+    switch_name: "{{ vcenter_vswitchname }}"
+    state: absent
+  delegate_to: localhost
+  register: vcenter_vswitch_info
+
+- name: Remove Cluster
+  community.vmware.vmware_cluster:
+    hostname: "{{ vcenter_hostname }}"
+    username: "{{ vcenter_username }}"
+    password: "{{ vcenter_password }}"
+    validate_certs: "{{ vcenter_validate_certs }}"
+    datacenter: "{{ vcenter_datacentername }}"
+    cluster_name: "{{ vcenter_clustername }}"
+    state: absent
+  delegate_to: localhost
+
 - name: Build a list of all the folders
   vmware.vmware_rest.vcenter_folder_info:
     vcenter_hostname: "{{ vcenter_hostname }}"
