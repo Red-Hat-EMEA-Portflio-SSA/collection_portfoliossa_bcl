@@ -20,3 +20,10 @@
     local_follow: false
   become: true
 
+- name: assure windows vmware tools are on bastion host
+  ansible.builtin.copy: 
+    dest: "{{ bastion_iso_dir }}"
+    src: "{{ local_vmware_tools_win }}"
+    local_follow: false
+  become: true
+  when: local_vmware_tools_win is defined
