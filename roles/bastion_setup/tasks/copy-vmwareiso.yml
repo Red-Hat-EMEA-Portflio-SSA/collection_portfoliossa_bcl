@@ -26,4 +26,15 @@
     src: "{{ local_vmware_tools_win }}"
     local_follow: false
   become: true
-  when: local_vmware_tools_win is defined
+  when: 
+    - local_vmware_tools_win is defined
+    - 'zip' is not in local_vmware_tools_win
+
+- name: assure windows vmware tools are unzipped on bastion host
+  ansible.builtin.unarchive: 
+    dest: "{{ bastion_iso_dir }}"
+    src: "{{ local_vmware_tools_win }}"
+  become: true
+  when: 
+    - local_vmware_tools_win is defined
+    - 'zip' is in local_vmware_tools_win
