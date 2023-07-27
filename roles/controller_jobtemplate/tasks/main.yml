@@ -18,6 +18,7 @@
     execution_environment: "{{ jobtemplate_ee | default(omit) }}"
     extra_vars: "{{ jobtemplate_extravars | default(omit) }}"
     verbosity:  "{{ jobtemplate_verbosity | default(0, true) }}" 
+    limit:  "{{ jobtemplate_limit | default(omit) }}" 
   register: jobtemplate_create
   delegate_to: localhost
   when:
