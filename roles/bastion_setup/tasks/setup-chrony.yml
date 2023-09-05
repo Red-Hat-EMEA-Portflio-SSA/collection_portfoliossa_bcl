@@ -4,8 +4,13 @@
     name: chrony
     state: present
 
-# - name: configure chronyd
-# default configuration good enough
+- name: configure chronyd
+  ansible.builtin.lineinfile:
+    path: /etc/chrony.conf
+    line: "allow 10.6.0.0/16"
+    insertbefore: "^allow"
+    firstmatch: true
+ 
 
 - name: start chronyd
   ansible.builtin.systemd:
