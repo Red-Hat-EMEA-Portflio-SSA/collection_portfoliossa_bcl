@@ -90,6 +90,7 @@
     validate_certs: "{{ vcenter_validate_certs }}"
     datacenter: "{{ vcenter_datacentername }}"
     switch_name: "{{ vcenter_vswitchname }}"
+    switch_version: "7.0.2"
     uplink_quantity: 1
     state: present
   delegate_to: localhost
