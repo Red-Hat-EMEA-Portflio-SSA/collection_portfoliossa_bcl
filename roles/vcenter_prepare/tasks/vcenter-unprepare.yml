@@ -7,6 +7,7 @@
     validate_certs: "{{ vcenter_validate_certs }}"
     switch_name: "{{ vcenter_vswitchname }}"
     portgroup_name: "{{ vcenter_portgroupname }}"
+    port_binding: static
     vlan_id: "{{ vcenter_vlanid }}"
     state: absent
   delegate_to: localhost
