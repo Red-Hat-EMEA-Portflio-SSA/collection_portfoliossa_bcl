@@ -4,10 +4,10 @@
     port: "{{ inner_item }}"
     host: "{{ esxi_hostname }}"
     # all values in seconds
-    delay: 300            # wait 5 min before 1st try
+    delay: 5            # wait 5 sec before 1st try
     connect_timeout: 10   # wait 10 sec with each try
     sleep: 20             # wait 20 sec before trying agin
-    timeout: 1200         # wait 20 min alltogether before failing
+    timeout: 1500         # wait 30 min alltogether before failing
     msg: "ESXi {{ esxi_hostname }} not ready yet"
   delegate_to: localhost
   loop:
@@ -24,7 +24,7 @@
     port: "{{ inner_item }}"
     host: "{{ esxi_hostname }}"
     # all values in seconds
-    delay: 30             # wait 30 sec before 1st try
+    delay: 5             # wait 5 sec before 1st try
     connect_timeout: 10   # wait 10 sec with each try
     sleep: 20             # wait 20 sec before trying agin
     timeout: 600          # wait 10 min alltogether before failing
