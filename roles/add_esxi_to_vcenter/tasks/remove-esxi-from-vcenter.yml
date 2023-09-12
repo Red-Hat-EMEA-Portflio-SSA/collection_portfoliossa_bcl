@@ -10,8 +10,9 @@
     esxi_username: "{{ esxi_username }}"
     esxi_password: "{{ esxi_password }}"
     fetch_ssl_thumbprint: true
-    datacenter_name: "bcl"
-    folder: "/{{ vcenter_datacentername }}/host/hosts"
+    datacenter_name: "{{ vcenter_datacentername }}"
+    cluster_name: "{{ vcenter_clustername }}"
+    # folder: "/{{ vcenter_datacentername }}/host/hosts"
       ## folder: "host/hosts"
     state: absent
   delegate_to: localhost
