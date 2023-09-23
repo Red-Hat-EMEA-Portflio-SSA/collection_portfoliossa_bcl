@@ -11,6 +11,9 @@
       - httpd
       - genisoimage
       - wget
+      - mkisofs
+      - syslinux
+      - isomd5sum
     state: latest
 
 - name: start httpd
