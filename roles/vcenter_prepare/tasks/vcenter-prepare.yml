@@ -109,10 +109,12 @@
     password: "{{ vcenter_password }}"
     validate_certs: "{{ vcenter_validate_certs }}"
     switch_name: "{{ vcenter_vswitchname }}"
-    portgroup_name: "{{ vcenter_portgroupname }}"
-    vlan_id: "{{ vcenter_vlanid }}"
+    portgroup_name: "{{ item.name }}"
+    vlan_id: "{{ item.id }}"
     num_ports: 120
     port_binding: static
     state: present
   delegate_to: localhost
   register: vcenter_vswitch_info
+  loop: {{ vcenter_portgroups }}
+
