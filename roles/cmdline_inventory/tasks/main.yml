@@ -1,7 +1,7 @@
 ---
 # tasks file for cmdline_inventory
 
-- name: Add OneView Host to inventory
+- name: Add a Host to cmd-line inventory
   add_host:
     name: "{{ inner_item.name }}"
     ansible_host: "{{ inner_item.host_ip | default (omit)  }}"
