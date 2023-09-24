@@ -14,7 +14,6 @@
     - '902'
     - '80'
     - '443'
-    - '427'
   loop_control:
     loop_var: inner_item
   # see: https://kb.vmware.com/s/article/2039095 for needed ports
@@ -34,7 +33,6 @@
     - '902'
     - '80'
     - '443'
-    - '427'
   loop_control:
     loop_var: inner_item
 
