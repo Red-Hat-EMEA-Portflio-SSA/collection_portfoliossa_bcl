@@ -17,6 +17,18 @@
   delegate_to: localhost
   ignore_errors: true
 
+- name: Gather facts about a Server Hardware by name
+  hpe.oneview.oneview_server_hardware_facts:
+    hostname: "{{ oneview_host }}"
+    username: "{{ oneview_username }}"
+    password: "{{ oneview_password }}"
+    auth_login_domain: "{{ oneview_domain }}"
+    api_version: "{{ oneview_apiversion }}"
+    name : "{{ inventory_hostname }}.hpintelco.org"
+  delegate_to: localhost
+
+- debug: var=server_hardwares
+
 - name: Remove a server profile 
   hpe.oneview.oneview_server_profile:
     hostname: "{{ oneview_host }}"
