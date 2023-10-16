@@ -54,6 +54,21 @@
   delegate_to: localhost
   ignore_errors: true
       
+- name: Wait till final power state OFF is reached
+  hpe.oneview.oneview_server_hardware_facts:
+    hostname: "{{ oneview_host }}"
+    username: "{{ oneview_username }}"
+    password: "{{ oneview_password }}"
+    auth_login_domain: "{{ oneview_domain }}"
+    api_version: "{{ oneview_apiversion }}"
+    name: "{{ inventory_hostname }}.hpintelco.org"
+  delegate_to: localhost
+  delay: 10
+  retries: 30
+  until: 
+    - server_hardwares.powerState is defined 
+    - server_hardwares.powerState == "On"
+
 - name: Create a server profile 
   hpe.oneview.oneview_server_profile:
     hostname: "{{ oneview_host }}"
