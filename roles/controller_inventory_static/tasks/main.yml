@@ -41,7 +41,9 @@
         host_mask: "{{ inner_item.host_mask | default (omit) }}"
         host_gw: "{{ inner_item.host_gw | default (omit) }}"
         host_nameserver: "{{ inner_item.host_nameserver | default (omit) }}"
-
+        ov_hardware: "{{ inner_item.ov_hardware | default (omit) }}"
+        ov_hostname: "{{ inner_item.ov_hostname | default (omit) }}"
+        server_hardware_type_name: "{{ inner_item.server_hardware_type_name | default (omit) }}"
   register: inventory_hosts_create
   delegate_to: localhost
   when:
