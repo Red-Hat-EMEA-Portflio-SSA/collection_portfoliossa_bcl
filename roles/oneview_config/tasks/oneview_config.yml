@@ -67,7 +67,7 @@
   retries: 30
   until: 
     - server_hardwares.powerState is defined 
-    - server_hardwares.powerState == "On"
+    - server_hardwares.powerState == "Off"
 
 - name: Create a server profile 
   hpe.oneview.oneview_server_profile:
