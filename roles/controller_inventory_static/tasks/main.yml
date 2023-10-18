@@ -44,6 +44,7 @@
         ov_hardware: "{{ inner_item.ov_hardware | default (omit) }}"
         ov_hostname: "{{ inner_item.ov_hostname | default (omit) }}"
         server_hardware_type_name: "{{ inner_item.server_hardware_type_name | default (omit) }}"
+        ov_spp_name: "{{ inner_item.ov_spp_name | default (omit) }}"
   register: inventory_hosts_create
   delegate_to: localhost
   when:
