@@ -45,6 +45,7 @@
         ov_hostname: "{{ inner_item.ov_hostname | default (omit) }}"
         server_hardware_type_name: "{{ inner_item.server_hardware_type_name | default (omit) }}"
         ov_spp_name: "{{ inner_item.ov_spp_name | default (omit) }}"
+        oneview_host: "{{ inner_item.oneview_host | default (omit) }}"
   register: inventory_hosts_create
   delegate_to: localhost
   when:
